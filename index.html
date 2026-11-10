@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive classroom learning hub about preparing electronic products: solar panels.">
+<title>Solar Panel Learning Hub | Preparing Electronic Products</title>
+<style>
+:root{--navy:#08264d;--blue:#1769e0;--blue2:#3b82f6;--green:#159957;--yellow:#ffbd24;--ink:#17243a;--muted:#64748b;--bg:#f5f8fc;--card:#fff;--line:#dce5f1;--shadow:0 12px 35px #08264d12;--font-scale: 1}
+*{box-sizing:border-box;scroll-behavior:smooth}
+html{font-size:calc(16px * var(--font-scale))}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+body.dark{--bg:#0d1728;--card:#142238;--ink:#eaf1fb;--muted:#a8b8ce;--line:#2b3e58;--shadow:0 12px 35px #0003}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;box-shadow:0 4px 18px #00142b30}
+.nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:18px;padding:12px 20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.08rem;white-space:nowrap}
+.brand .sun{font-size:1.8rem}
+.brand small{display:block;color:#ffd54f;font-size:.72rem;letter-spacing:.08em}
+.navlinks{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap}
+.navlinks a,.navbtn{padding:9px 12px;border-radius:9px;font-size:.88rem;color:#eaf2ff;background:transparent;border:0}
+.navlinks a:hover,.navlinks a.active,.navbtn:hover{background:#1769e0;color:white}
+.menu-toggle{display:none}
+.font-controls{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,0.1);border-radius:9px;padding:2px}
+.font-controls button{padding:5px 9px;font-size:.82rem;font-weight:700;color:#eaf2ff;background:transparent;border:0;border-radius:7px}
+.font-controls button:hover{background:#1769e0;color:white}
+
+/* Live Stats & Like Button Styles */
+.stats-badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);padding:4px 12px;border-radius:20px;font-size:.84rem;font-weight:700;color:#fff}
+.stats-item{display:flex;align-items:center;gap:4px}
+.like-btn{background:#e11d48;color:#fff;border:0;padding:5px 12px;border-radius:16px;font-weight:700;font-size:.82rem;display:inline-flex;align-items:center;gap:5px;transition:.2s}
+.like-btn:hover{background:#be123c;transform:scale(1.04)}
+.like-btn.liked{background:#10b981}
+
+.hero{background:linear-gradient(90deg,#eaf5ffed 0%,#eaf5ffbd 48%,#eaf5ff10 100%),url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1800&q=85') center/cover;min-height:420px;display:flex;align-items:center}
+.hero-inner{max-width:1200px;width:100%;margin:auto;padding:58px 24px}
+.hero-copy{max-width:630px}
+.eyebrow{display:inline-block;background:#d9eaff;color:#1555b8;border-radius:30px;padding:6px 13px;font-size:.82rem;font-weight:700}
+h1{font-size:clamp(2.3rem,5vw,4.3rem);line-height:1.08;margin:16px 0;color:#092d61;letter-spacing:-.04em}
+h1 span{color:var(--blue)}
+.hero p{font-size:1.13rem;color:#243b5b;max-width:600px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.btn.primary{background:var(--blue);color:white;box-shadow:0 6px 16px #1769e033}
+.btn.outline{background:white;border:1px solid #9dbbe8;color:#1455b7}
+.btn:hover{transform:translateY(-2px)}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.stat{background:#ffffffd9;border:1px solid #d9e7f6;border-radius:12px;padding:10px 15px;color:#17365e;font-size:.85rem}
+.stat strong{display:block;font-size:1.1rem;color:#1769e0}
+main{max-width:1200px;margin:auto;padding:30px 20px 55px}
+.section{margin:38px 0;scroll-margin-top:90px}
+.section-head{text-align:center;margin-bottom:24px}
+.section-head .kicker{color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}
+h2{font-size:clamp(1.55rem,3vw,2.35rem);margin:5px 0 8px;color:var(--ink);letter-spacing:-.025em}
+.section-head p{color:var(--muted);max-width:720px;margin:0 auto}
+.grid{display:grid;gap:17px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.card-pad{padding:20px}
+.card h3{margin:0 0 7px;font-size:1.08rem}
+.card p{margin:0;color:var(--muted)}
+.photo{width:100%;height:180px;object-fit:cover;display:block;background:#dce8f5}
+.component-card{cursor:pointer;transition:.22s;position:relative}
+.component-card:hover{transform:translateY(-5px);border-color:#8bb7f5}
+.component-card .photo{height:155px}
+.component-card .number{position:absolute;top:12px;left:12px;background:var(--blue);color:#fff;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;font-weight:800}
+.component-card .card-pad{padding:15px}
+.component-card h3{font-size:1rem}
+.tag{display:inline-block;background:#e7f1ff;color:#1559b8;padding:4px 9px;border-radius:20px;font-size:.75rem;font-weight:700;margin-top:10px}
+body.dark .tag{background:#1b3b64;color:#9fc5ff}
+.callout{padding:18px 20px;border-radius:14px;background:#eaf4ff;border:1px solid #c6defe;color:#17365e}
+body.dark .callout{background:#142e4c;color:#dbeafe;border-color:#294b72}
+.callout strong{color:var(--blue)}
+.image-wide{width:100%;height:260px;object-fit:cover;border-radius:16px;border:1px solid var(--line)}
+.timeline{display:grid;gap:12px}
+.timeline-item{display:flex;gap:14px;padding:15px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.stepnum{flex:0 0 38px;height:38px;border-radius:50%;background:#e2f7eb;color:#11804b;display:grid;place-items:center;font-weight:800}
+.timeline-item h3{margin:0 0 4px}
+.timeline-item p{margin:0;color:var(--muted)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 17px}
+details+details{margin-top:10px}
+summary{font-weight:750;cursor:pointer}
+details p,details li{color:var(--muted)}
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;background:var(--card);min-width:550px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#eaf2ff;color:#174b93}
+body.dark th{background:#1b3556;color:#bcd8ff}
+tr:last-child td{border-bottom:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 13px;border-radius:9px;font-weight:700}
+.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.tabpanel{display:none}.tabpanel.active{display:block}
+.calc{background:var(--card);padding:22px;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+label{font-weight:700;font-size:.9rem;display:block;margin-bottom:5px}
+input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+.result{margin-top:16px;padding:16px;background:#eaf8ef;border:1px solid #bce7cc;border-radius:12px;color:#145b35}
+body.dark .result{background:#143524;border-color:#245c3b;color:#b9f6ce}
+.result strong{font-size:1.45rem}
+.quiz-question{padding:17px;background:var(--card);border:1px solid var(--line);border-radius:13px;margin:12px 0}
+.quiz-question p{font-weight:750;margin:0 0 10px}
+.option{display:block;padding:7px 10px;border-radius:8px;font-weight:500}
+.option:hover{background:var(--bg)}
+.option input{width:auto;margin-right:8px}
+.feedback{font-size:.9rem;margin-top:8px;font-weight:700}
+.glossary-search{max-width:500px;margin:0 auto 18px}
+.glossary-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.glossary-list details{margin:0}
+.tip{display:flex;gap:13px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px}
+.tip-icon{font-size:1.5rem}
+footer{background:#071f42;color:#dbeafe;padding:28px 20px;text-align:center}
+footer strong{color:#ffd43b}
+.modal{position:fixed;inset:0;background:#07152dcc;z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-box{background:var(--card);color:var(--ink);max-width:700px;width:100%;max-height:90vh;overflow:auto;border-radius:18px;padding:22px;position:relative}
+.modal-box img{width:100%;height:260px;object-fit:cover;border-radius:12px;margin:8px 0 15px}
+.close{position:absolute;right:15px;top:12px;border:0;background:var(--bg);color:var(--ink);border-radius:50%;width:36px;height:36px;font-size:1.3rem}
+.progressbar{height:9px;background:var(--line);border-radius:9px;overflow:hidden;margin:15px 0}
+.progressbar span{height:100%;display:block;background:var(--green);width:0;transition:.3s}
+.small{font-size:.86rem;color:var(--muted)}
+.access-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center;box-shadow:var(--shadow);max-width:500px;margin:0 auto}
+.access-box input{margin:12px 0;text-align:center}
+.access-error{color:#dc2626;font-size:.88rem;font-weight:700;margin-top:8px;display:none}
+.locked-content{display:none}
+.student-info-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:20px;box-shadow:var(--shadow)}
+.student-info-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+.sync-status{margin-top:12px;padding:12px;border-radius:8px;font-size:.9rem;font-weight:700;display:none}
+.sync-status.success{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+.sync-status.error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.sync-status.pending{background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
+.code-block{background:#1e293b;color:#e2e8f0;padding:12px;border-radius:8px;font-family:monospace;font-size:.82rem;overflow-x:auto;white-space:pre-wrap}
+@media(max-width:900px){.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.navlinks{display:none;position:absolute;top:60px;left:0;right:0;background:var(--navy);padding:12px;flex-direction:column}.navlinks.show{display:flex}.menu-toggle{display:inline-block;margin-left:auto;background:#174c8e;color:#fff;border:0;border-radius:8px;padding:8px 11px}.nav{flex-wrap:wrap}.formgrid,.student-info-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.hero{min-height:470px;background-position:60% center}.hero-inner{padding:42px 20px}.grid.two,.grid.three,.grid.four,.glossary-list,.formgrid,.student-info-grid{grid-template-columns:1fr}.component-card .photo{height:210px}.image-wide{height:190px}.nav{padding:10px 14px}.brand{font-size:.95rem}}
+@media print{.topbar,.actions,.btn,.modal,footer,.access-box,.access-controls,.student-info-card{display:none!important}body{background:white;color:#111}.card,.calc{box-shadow:none;break-inside:avoid}main{max-width:none}.locked-content{display:block!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <nav class="nav" aria-label="Main navigation">
+  <a class="brand" href="#home"><span class="sun">☀️</span><span>Solar Panel<small>LEARNING HUB</small></span></a>
+  
+  <!-- Live Stats Badge in Navigation Header -->
+  <div class="stats-badge">
+   <span class="stats-item" title="Total Page Visitors">👁️ <span id="navViewsCount">...</span></span>
+   <span class="stats-item" title="Total Page Likes">❤️ <span id="navLikesCount">...</span></span>
+   <button class="like-btn" id="navLikeBtn" title="Like this learning hub">❤️ Like</button>
+  </div>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰ Menu</button>
+  <div class="navlinks" id="navlinks">
+   <a href="#home">⌂ Home</a><a href="#components">▦ Components</a><a href="#working">◉ How It Works</a><a href="#preparation">⚒ Preparation</a><a href="#calculator">∑ Calculator</a><a href="#quiz">? Quiz</a><a href="#tips">☀ Tips</a><a href="#glossary">▤ Glossary</a>
+  </div>
+  <div class="font-controls" title="Adjust font size">
+   <button id="fontDecrease" title="Decrease font size">A-</button>
+   <button id="fontReset" title="Reset font size">A</button>
+   <button id="fontIncrease" title="Increase font size">A+</button>
+  </div>
+  <button class="navbtn" id="themeToggle" title="Toggle light/dark mode">🌙</button>
+ </nav>
+</header>
+
+<section class="hero" id="home">
+ <div class="hero-inner"><div class="hero-copy">
+  <span class="eyebrow">ELECTRONICS • RENEWABLE ENERGY • HANDS-ON LEARNING</span>
+  <h1>Preparing Electronic Products<br><span>(Solar Panel)</span></h1>
+  <p>Discover how solar panels turn sunlight into electricity, explore their parts, and learn how to prepare, test, and maintain a simple solar-powered product safely.</p>
+  <div class="actions">
+   <a class="btn primary" href="#intro">Start Learning →</a>
+   <a class="btn outline" href="#quiz">Take the Quiz ✎</a>
+   <button class="btn outline like-btn" id="heroLikeBtn">❤️ Like Page (<span id="heroLikesCount">0</span>)</button>
+  </div>
+  <div class="hero-stats">
+   <div class="stat"><strong>PV</strong>Photovoltaic technology</div>
+   <div class="stat"><strong>DC</strong>Panel output</div>
+   <div class="stat"><strong>Clean</strong>Renewable energy</div>
+   <div class="stat"><strong id="heroViewsStat">...</strong>Page Visitors</div>
+  </div>
+ </div></div>
+</section>
+
+<main>
+<section class="section" id="intro">
+ <div class="section-head"><span class="kicker">01 • Introduction</span><h2>What Is a Solar Panel?</h2><p>A solar panel—or photovoltaic (PV) module—is an electronic product that converts sunlight directly into electrical energy through the photovoltaic effect.</p></div>
+ <div class="grid two">
+  <div class="card"><img class="photo" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=80" alt="Solar panels installed under sunlight"><div class="card-pad"><h3>Why learn about solar panels?</h3><p>Solar technology is used in homes, schools, farms, streetlights, charging stations, and remote facilities. Preparing a system combines electronics knowledge, practical skills, planning, and safety.</p></div></div>
+  <div class="card card-pad"><h3>Learning objectives</h3><ul><li>Explain how photovoltaic cells generate electricity.</li><li>Identify solar-system components and their functions.</li><li>Describe tools, materials, and preparation steps.</li><li>Explain safe assembly, testing, and troubleshooting.</li><li>Calculate basic energy and power requirements.</li><li>Appreciate renewable energy and sustainability.</li></ul><div class="callout"><strong>Key idea:</strong> A solar panel needs light—not heat—to generate electricity. Excessive cell temperature can reduce its output.</div></div>
+ </div>
+</section>
+
+<section class="section" id="components">
+ <div class="section-head"><span class="kicker">02 • Explore</span><h2>Components of a Solar Panel System</h2><p>Select or click a component card to view its purpose, function, and key considerations.</p></div>
+ <div class="grid four" id="componentGrid">
+  <article class="card component-card" data-component="cells"><span class="number">1</span><img class="photo" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=700&q=80" alt="Photovoltaic solar cells"><div class="card-pad"><h3>Solar Panel / PV Cells</h3><p>Convert sunlight into DC electrical energy.</p><span class="tag">Energy source</span></div></article>
+  <article class="card component-card" data-component="controller"><span class="number">2</span><img class="photo" src="https://m.media-amazon.com/images/I/619bRLPN-lL.jpg" alt="Electronic control equipment"><div class="card-pad"><h3>Charge Controller</h3><p>Regulates charging and helps protect batteries.</p><span class="tag">Charge regulation</span></div></article>
+  <article class="card component-card" data-component="battery"><span class="number">3</span><img class="photo" src="https://img.vevorstatic.com/us/SXHDCLSTLLSTM2MD0001V9/goods_img-v1/deep-cycle-battery-m100-1.2.jpg?timestamp=1749116358000&format=webp" alt="Battery and electrical equipment"><div class="card-pad"><h3>Battery</h3><p>Stores energy for later use.</p><span class="tag">Energy storage</span></div></article>
+  <article class="card component-card" data-component="inverter"><span class="number">4</span><img class="photo" src="https://down-ph.img.susercontent.com/file/ph-11134207-7r990-lvr40pp2latd9c" alt="Electrical inverter equipment"><div class="card-pad"><h3>Inverter</h3><p>Converts DC electricity into AC.</p><span class="tag">DC → AC</span></div></article>
+  <article class="card component-card" data-component="wires"><span class="number">5</span><img class="photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_XuDHFlRIvXhaqj_5WQHhmQR6pDNF3y6sbwww0slfd4OtQaXugFDbEDk&s=10" alt="Electrical cables and equipment"><div class="card-pad"><h3>Wires & Connectors</h3><p>Carry current between components.</p><span class="tag">Connection</span></div></article>
+  <article class="card component-card" data-component="protection"><span class="number">6</span><img class="photo" src="https://fuspan.com/wp-content/uploads/2025/08/6solar-panel-protection-devices.jpg" alt="Electrical protection equipment"><div class="card-pad"><h3>Fuses / Breakers</h3><p>Help protect circuits against faults.</p><span class="tag">Protection</span></div></article>
+  <article class="card component-card" data-component="mount"><span class="number">7</span><img class="photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RuBgfXfw4mH_t2HA0soNge5eAalcesJ3S3dgP887ew&s=10" alt="Solar panel mounting"><div class="card-pad"><h3>Mounting Structure</h3><p>Supports panels securely in position.</p><span class="tag">Support</span></div></article>
+  <article class="card component-card" data-component="meter"><span class="number">8</span><img class="photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy4jrt5Xqrqh5fpo86veIkHujnrUXouGE3kpKUl5c9Pw&s=10" alt="Electronics testing equipment"><div class="card-pad"><h3>Digital Multimeter</h3><p>Measures voltage, current, and resistance.</p><span class="tag">Testing</span></div></article>
+ </div>
+ <div class="callout" style="margin-top:18px">A complete system may also include a distribution board, grounding/bonding equipment, surge protection, and an inverter depending on its design.</div>
+</section>
+
+<section class="section" id="working">
+ <div class="section-head"><span class="kicker">03 • Understand</span><h2>How a Solar Panel Works</h2><p>Follow the energy from sunlight to a useful electrical load.</p></div>
+ <div class="grid two">
+  <div><img class="image-wide" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=85" alt="Solar panel array receiving sunlight"><div class="small" style="margin-top:8px">Photovoltaic modules receive sunlight and generate DC electricity.</div></div>
+  <div class="timeline">
+   <div class="timeline-item"><div class="stepnum">1</div><div><h3>Sunlight absorption</h3><p>Photons transfer energy to electrons in semiconductor cells, commonly made from silicon.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">2</div><div><h3>Charge separation</h3><p>An internal electric field helps separate charges and creates electrical potential.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">3</div><div><h3>Electricity generation</h3><p>When connected to a circuit, electrons flow and produce direct current (DC).</p></div></div>
+   <div class="timeline-item"><div class="stepnum">4</div><div><h3>Energy use or storage</h3><p>Power can operate compatible DC loads, charge a battery through a controller, or be converted to AC by an inverter.</p></div></div>
+  </div>
+ </div>
+ <div class="card card-pad" style="margin-top:18px"><h3>Basic off-grid energy flow</h3><div class="grid four" style="text-align:center;align-items:center"><div class="callout"><strong>☀️ Solar Panel</strong><br>Generates DC</div><div>→ <strong>Controller</strong><br>Regulates charge</div><div>→ <strong>Battery</strong><br>Stores energy</div><div>→ <strong>Load</strong><br>Uses energy</div></div><p class="small" style="margin-top:10px">An inverter is added when AC appliances are required. Follow the manufacturer's wiring sequence and system diagram.</p></div>
+</section>
+
+<section class="section" id="types">
+ <div class="section-head"><span class="kicker">04 • Compare</span><h2>Types of Solar Panels & Systems</h2><p>Different technologies and system configurations suit different applications.</p></div>
+ <div class="tabs"><button class="tab active" data-tab="paneltypes">Panel technologies</button><button class="tab" data-tab="systemtypes">System configurations</button></div>
+ <div class="tabpanel active" id="paneltypes"><div class="grid three">
+  <div class="card"><img class="photo" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=700&q=80" alt="Monocrystalline panel"><div class="card-pad"><h3>Monocrystalline</h3><p>Single-crystal silicon; typically dark in appearance and efficient in limited space.</p></div></div>
+  <div class="card"><img class="photo" src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=700&q=80" alt="Solar panels"><div class="card-pad"><h3>Polycrystalline</h3><p>Multiple silicon crystals; commonly blue in appearance and generally lower efficiency than many mono panels.</p></div></div>
+  <div class="card"><img class="photo" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=700&q=80" alt="Photovoltaic modules"><div class="card-pad"><h3>Thin-film / Flexible</h3><p>Thin semiconductor layers; some designs are lightweight or flexible, depending on construction.</p></div></div>
+ </div></div>
+ <div class="tabpanel" id="systemtypes"><div class="grid three">
+  <div class="card card-pad"><h3>Off-grid</h3><p>Independent of utility power; commonly uses panels, charge controller, battery, and possibly inverter.</p><span class="tag">Remote locations</span></div>
+  <div class="card card-pad"><h3>Grid-tied</h3><p>Connected to the utility through an approved inverter and interconnection equipment. Typical systems shut down during grid outages unless designed otherwise.</p><span class="tag">Homes / buildings</span></div>
+  <div class="card card-pad"><h3>Hybrid</h3><p>Combines solar, battery storage, and utility connection; backup operation depends on equipment and design.</p><span class="tag">Flexible energy</span></div>
+ </div></div>
+</section>
+
+<section class="section" id="preparation">
+ <div class="section-head"><span class="kicker">05 • Practical skills</span><h2>Preparing a Solar Panel Product</h2><p>Use this learning sequence to plan, inspect, assemble, test, and document a small educational system.</p></div>
+ <div class="grid two">
+  <div><img class="image-wide" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1000&q=85" alt="Electronics workbench and tools"><div class="callout" style="margin-top:14px"><strong>Before starting:</strong> Use low-voltage educational equipment, teacher supervision, a dry work area, and compatible components. Do not attempt grid-connected wiring as a student activity.</div></div>
+  <div class="timeline">
+   <div class="timeline-item"><div class="stepnum">1</div><div><h3>Plan the product</h3><p>Identify the load, operating hours, daily energy need, and intended application.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">2</div><div><h3>Select components</h3><p>Choose a panel, controller, battery, wires, protection, and load with compatible ratings.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">3</div><div><h3>Prepare tools & workspace</h3><p>Organize a multimeter, wire tools, insulated equipment, PPE, and a clean dry bench.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">4</div><div><h3>Inspect materials</h3><p>Check for cracked glass, damaged cables, loose terminals, and component labels/specifications.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">5</div><div><h3>Assemble safely</h3><p>Follow the approved diagram and manufacturer's sequence; verify polarity before connection.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">6</div><div><h3>Test & record</h3><p>Measure appropriate values, observe operation, and document results and issues.</p></div></div>
+   <div class="timeline-item"><div class="stepnum">7</div><div><h3>Evaluate & maintain</h3><p>Check performance, explain troubleshooting, and recommend safe maintenance.</p></div></div>
+  </div>
+ </div>
+ <h3 style="margin-top:28px">Tools and materials checklist</h3>
+ <div class="table-wrap"><table><thead><tr><th>Item</th><th>Purpose</th><th>Check</th></tr></thead><tbody>
+ <tr><td>Digital multimeter</td><td>Measure voltage, current (proper method), resistance/continuity</td><td>☐</td></tr>
+ <tr><td>Wire stripper / cutter</td><td>Prepare conductors without damaging strands</td><td>☐</td></tr>
+ <tr><td>Crimping tool & terminals</td><td>Make suitable terminal connections</td><td>☐</td></tr>
+ <tr><td>Solar cables / connectors</td><td>Connect components with rated conductors</td><td>☐</td></tr>
+ <tr><td>Controller, battery, load</td><td>Regulate, store, and use energy</td><td>☐</td></tr>
+ <tr><td>Fuse / DC breaker</td><td>Provide correctly selected circuit protection</td><td>☐</td></tr>
+ <tr><td>Safety glasses & suitable PPE</td><td>Reduce exposure to work hazards</td><td>☐</td></tr>
+ </tbody></table></div>
+ <h3 style="margin-top:28px">Assembly sequence: review each step</h3>
+ <details><summary>Step 1 — Inspect and position the panel</summary><p>Inspect glass, frame, junction box, leads, and connectors. Place the module on a stable support and avoid shading where possible.</p></details>
+ <details><summary>Step 2 — Read specifications and confirm compatibility</summary><p>Check Voc, Isc, Vmp, Imp, battery chemistry/voltage, controller PV limits, current ratings, and load requirements.</p></details>
+ <details><summary>Step 3 — Connect the battery to the controller (where required)</summary><p>Many controllers require battery connection first to recognize system voltage. Follow the exact controller manual, including disconnect sequence.</p></details>
+ <details><summary>Step 4 — Connect PV input and verify polarity</summary><p>Use appropriate cables/connectors. Confirm positive and negative, allowable PV voltage, and protective devices before connecting.</p></details>
+ <details><summary>Step 5 — Connect a compatible load</summary><p>Use controller load terminals only if rated for the load; otherwise use a properly designed and protected circuit.</p></details>
+ <details><summary>Step 6 — Inspect, test, and document</summary><p>Check wiring, insulation, terminals, and protection. Conduct only approved measurements with correctly rated instruments, then record readings and observations.</p></details>
+</section>
+
+<section class="section" id="connections">
+ <div class="section-head"><span class="kicker">06 • Circuit concepts</span><h2>Series and Parallel Connections</h2><p>Connecting panels changes the electrical output. The design must remain within controller and protection ratings.</p></div>
+ <div class="grid two">
+  <div class="card card-pad"><h3>Series connection</h3><div class="callout" style="text-align:center;margin:12px 0"><strong>Panel A (+) → Panel B (−)</strong><br>Voltage adds • Current stays similar</div><p>For two matched panels operating at 12 V and 5 A each: total operating voltage ≈ 24 V, current ≈ 5 A, power ≈ 120 W.</p></div>
+  <div class="card card-pad"><h3>Parallel connection</h3><div class="callout" style="text-align:center;margin:12px 0"><strong>Positive to positive<br>Negative to negative</strong><br>Current adds • Voltage stays similar</div><p>For two matched panels operating at 12 V and 5 A each: voltage ≈ 12 V, current ≈ 10 A, power ≈ 120 W.</p></div>
+ </div>
+ <div class="callout" style="margin-top:14px"><strong>Design caution:</strong> Use matched modules where appropriate and calculate cold-weather Voc, Isc, wiring, and protection. Never exceed the controller's maximum PV input voltage/current.</div>
+</section>
+
+<section class="section" id="calculator">
+ <div class="section-head"><span class="kicker">07 • Try it</span><h2>Solar Energy Calculator</h2><p>Estimate daily energy and a theoretical panel size. These are planning estimates, not guaranteed production.</p></div>
+ <div class="calc">
+  <div class="formgrid">
+   <div><label for="loadW">Load power (watts)</label><input id="loadW" type="number" min="0" step="0.1" value="5"></div>
+   <div><label for="hours">Use per day (hours)</label><input id="hours" type="number" min="0" max="24" step="0.1" value="4"></div>
+   <div><label for="sunHours">Peak sun hours</label><input id="sunHours" type="number" min="0.1" max="12" step="0.1" value="4"></div>
+   <div><label for="efficiency">System efficiency (%)</label><input id="efficiency" type="number" min="1" max="100" step="1" value="75"></div>
+   <div><label for="reserve">Design allowance (%)</label><input id="reserve" type="number" min="0" max="100" step="1" value="25"></div>
+  </div>
+  <button class="btn primary" id="calculate" style="margin-top:15px">Calculate estimate</button>
+  <div class="result" id="calcResult" aria-live="polite">Daily energy: <strong>20 Wh/day</strong><br>Estimated panel size before allowance: 6.7 W<br>Suggested size with allowance: 8.3 W</div>
+  <p class="small">Formula: Energy = Load (W) × Time (h). Panel estimate = Daily energy ÷ (Peak sun hours × efficiency). A real design must account for battery charging, weather, losses, and autonomy.</p>
+ </div>
+</section>
+
+<section class="section" id="testing">
+ <div class="section-head"><span class="kicker">08 • Quality check</span><h2>Testing, Troubleshooting & Maintenance</h2><p>Testing verifies operation; troubleshooting finds causes; maintenance helps preserve performance.</p></div>
+ <div class="grid two">
+  <div class="card card-pad"><h3>Multimeter testing</h3><ol><li>Use a meter with suitable DC voltage rating.</li><li>For open-circuit voltage, measure across panel terminals with no load, using safe leads and setup.</li><li>Compare the reading with specifications and conditions.</li><li>Measure operating voltage only in a suitable connected circuit.</li><li>Current measurement requires a correctly rated meter in series or a suitable clamp meter.</li></ol><div class="callout"><strong>Never:</strong> Put a meter in current mode directly across a battery or voltage source—it can create a short circuit.</div></div>
+  <div class="card card-pad"><h3>Common problems</h3><div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Possible cause / action</th></tr></thead><tbody><tr><td>Low output</td><td>Shading, dirt, heat, orientation, or connection loss</td></tr><tr><td>Battery not charging</td><td>Controller settings, compatibility, wiring, or battery fault</td></tr><tr><td>Lamp does not light</td><td>Discharged battery, loose wire, wrong load, or damaged lamp</td></tr><tr><td>Inverter shuts down</td><td>Overload, low battery, or overheating</td></tr><tr><td>Intermittent operation</td><td>Loose connection or protection activation</td></tr></tbody></table></div></div>
+ </div>
+ <div class="grid three" style="margin-top:16px">
+  <div class="tip"><span class="tip-icon">🧽</span><div><strong>Clean carefully</strong><p class="small">Follow panel guidance; avoid abrasive materials and unsafe rooftop work.</p></div></div>
+  <div class="tip"><span class="tip-icon">🔎</span><div><strong>Inspect regularly</strong><p class="small">Check panel, cables, connectors, mounting, and visible damage.</p></div></div>
+  <div class="tip"><span class="tip-icon">📈</span><div><strong>Monitor performance</strong><p class="small">Record weather, voltage, current (when safely measured), and load conditions.</p></div></div>
+ </div>
+</section>
+
+<section class="section" id="safety">
+ <div class="section-head"><span class="kicker">09 • Safety first</span><h2>Safety Rules for Solar Work</h2><p>Safety is part of product quality—not an optional step.</p></div>
+ <div class="grid three">
+  <div class="card card-pad"><h3>⚡ Electrical</h3><ul><li>Check polarity and ratings.</li><li>Never short panel or battery terminals.</li><li>Use DC-rated protection.</li><li>Isolate equipment using approved procedures.</li></ul></div>
+  <div class="card card-pad"><h3>🔋 Battery</h3><ul><li>Use compatible charging settings.</li><li>Prevent short circuits.</li><li>Follow chemistry-specific guidance.</li><li>Do not use damaged batteries.</li></ul></div>
+  <div class="card card-pad"><h3>🦺 Work area</h3><ul><li>Keep the bench dry and organized.</li><li>Use appropriate PPE.</li><li>Do not handle cracked panels.</li><li>Rooftop work requires trained professionals and fall protection.</li></ul></div>
+ </div>
+ <div class="callout" style="margin-top:15px"><strong>Grid-connected systems:</strong> Require qualified professionals, approved utility interconnection, permits/inspection as applicable, grounding/bonding, and appropriate protection. In the Philippines, follow applicable Philippine electrical standards and utility requirements.</div>
+</section>
+
+<section class="section assessmentsSection" id="quiz">
+ <div class="section-head"><span class="kicker">10 • Check your understanding</span><h2>Interactive Solar Panel Quiz</h2><p>Answer all questions, then check your score and review the feedback.</p></div>
+ 
+ <!-- Access Gate for Assessments Section -->
+ <div class="access-box" id="assessmentsGate">
+  <h3>🔒 Student Assessment Access</h3>
+  <p class="small">Please enter the student access code to unlock the quiz.</p>
+  <input type="password" id="studentCodeInput" placeholder="Enter student access code" aria-label="Student access code">
+  <br>
+  <button class="btn primary" id="unlockStudentBtn">Unlock Quiz</button>
+  <div class="access-error" id="studentAccessError">Incorrect access code. Please try again.</div>
+ </div>
+
+ <!-- Protected Assessments Content -->
+ <div class="locked-content" id="assessmentsContent">
+  <!-- Student Identification Card -->
+  <div class="student-info-card">
+   <h3 style="margin-top:0;margin-bottom:12px;font-size:1.05rem">👤 Student Information</h3>
+   <div class="student-info-grid">
+    <div>
+     <label for="studentName">Full Name *</label>
+     <input type="text" id="studentName" placeholder="e.g., Juan Dela Cruz" required>
+    </div>
+    <div>
+     <label for="studentGrade">Grade Level *</label>
+     <input type="text" id="studentGrade" placeholder="e.g., Grade 10" required>
+    </div>
+    <div>
+     <label for="studentSection">Section *</label>
+     <input type="text" id="studentSection" placeholder="e.g., Einstein" required>
+    </div>
+   </div>
+  </div>
+
+  <div id="quizForm"></div><div class="progressbar"><span id="quizProgress"></span></div>
+  <button class="btn primary" id="submitQuiz">Check & Submit My Answers</button> <button class="btn outline" id="resetQuiz">Try Again</button>
+  
+  <!-- Synchronization Feedback Box -->
+  <div class="sync-status" id="syncStatus"></div>
+  <div class="result" id="quizResult" aria-live="polite" style="display:none"></div>
+  
+  <div style="margin-top:20px;text-align:center" class="access-controls">
+   <button class="btn outline" id="lockStudentBtn">🔒 Lock Quiz Section</button>
+  </div>
+ </div>
+</section>
+
+<section class="section quizBeeSection" id="activity">
+ <div class="section-head"><span class="kicker">11 • Group performance</span><h2>Practical Activity: Solar LED Lighting</h2><p>Prepare and evaluate a small educational solar-powered lighting system with teacher supervision.</p></div>
+ 
+ <!-- Access Gate for Quiz Bee / Activity Section -->
+ <div class="access-box" id="quizBeeGate">
+  <h3>🔒 Teacher Access Required</h3>
+  <p class="small">Please enter the teacher access code to unlock this practical activity section.</p>
+  <input type="password" id="teacherCodeInput" placeholder="Enter teacher access code" aria-label="Teacher access code">
+  <br>
+  <button class="btn primary" id="unlockTeacherBtn">Unlock Activity</button>
+  <div class="access-error" id="teacherAccessError">Incorrect access code. Please try again.</div>
+ </div>
+
+ <!-- Protected Quiz Bee Content -->
+ <div class="locked-content" id="quizBeeContent">
+  <div class="card card-pad" style="margin-bottom:18px;background:#eef6ff;border-color:#b8d5fb">
+   <h3 style="margin-top:0">⚙️ Google Sheets Sync Settings (Teacher Control)</h3>
+   <p class="small" style="margin-bottom:10px">The Google Apps Script Web App URL is active and embedded:</p>
+   <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-bottom:10px">
+   <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn primary" id="saveScriptUrlBtn" style="font-size:.85rem;padding:8px 14px">Update Web App URL</button>
+    <button class="btn outline" id="openSyncSetupGuideBtn" style="font-size:.85rem;padding:8px 14px">📊 Setup Google Sheets Sync Guide</button>
+   </div>
+   <span id="saveUrlNotice" class="small" style="color:#059669;font-weight:700;display:none;margin-top:6px;display:inline-block"></span>
+  </div>
+
+  <div class="grid two">
+   <div class="card card-pad"><h3>Task & expected output</h3><p>Groups inspect compatible low-voltage components, assemble a solar panel–controller–battery–LED circuit using an approved diagram, test safely, and explain their observations.</p><h3 style="margin-top:16px">Submit</h3><ul><li>Functional educational prototype (if equipment allows)</li><li>Labeled system diagram</li><li>Component identification table</li><li>Test record and safety checklist</li><li>Short group presentation</li></ul></div>
+   <div class="card card-pad"><h3>Performance rubric (100 points)</h3><div class="table-wrap"><table><tbody><tr><td>Component identification</td><td>15</td></tr><tr><td>Assembly and connections</td><td>25</td></tr><tr><td>Safety practices</td><td>20</td></tr><tr><td>Testing and measurement</td><td>15</td></tr><tr><td>Functionality</td><td>15</td></tr><tr><td>Documentation / presentation</td><td>10</td></tr><tr><th>Total</th><th>100</th></tr></tbody></table></div></div>
+  </div>
+  <div style="margin-top:20px;text-align:center" class="access-controls">
+   <button class="btn outline" id="lockTeacherBtn">🔒 Lock Activity Section</button>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="tips">
+ <div class="section-head"><span class="kicker">12 • Remember</span><h2>Important Solar Panel Tips</h2><p>Good habits improve performance, reliability, and safety.</p></div>
+ <div class="grid three">
+  <div class="tip"><span class="tip-icon">☀️</span><div><strong>Position wisely</strong><p class="small">Avoid shading and choose suitable orientation and tilt.</p></div></div>
+  <div class="tip"><span class="tip-icon">🧹</span><div><strong>Keep it clean</strong><p class="small">Dust and dirt can block sunlight from reaching cells.</p></div></div>
+  <div class="tip"><span class="tip-icon">🔌</span><div><strong>Check connections</strong><p class="small">Use secure, correctly rated cables and connectors.</p></div></div>
+  <div class="tip"><span class="tip-icon">🛡️</span><div><strong>Use protection</strong><p class="small">Install suitable fuses, breakers, and disconnects.</p></div></div>
+  <div class="tip"><span class="tip-icon">📋</span><div><strong>Follow specifications</strong><p class="small">Never exceed voltage, current, or battery limits.</p></div></div>
+  <div class="tip"><span class="tip-icon">⚠️</span><div><strong>Work safely</strong><p class="small">Use supervision, approved procedures, and PPE.</p></div></div>
+ </div>
+</section>
+
+<section class="section" id="glossary">
+ <div class="section-head"><span class="kicker">13 • Vocabulary</span><h2>Solar Energy Glossary</h2><p>Search a term or open a definition to review key vocabulary.</p></div>
+ <div class="glossary-search"><input id="glossarySearch" type="search" placeholder="Search terms (e.g., PV, inverter, Voc)…" aria-label="Search glossary"></div>
+ <div class="glossary-list" id="glossaryList"></div>
+</section>
+
+<section class="section">
+ <div class="section-head"><span class="kicker">Wrap-up</span><h2>What Have You Learned?</h2><p>A solar product is more than a panel: it is a planned, connected, tested, and maintained system.</p></div>
+ <div class="callout"><strong>Remember the process:</strong> Plan → Select → Inspect → Prepare → Assemble → Test → Document → Maintain.<br><br><strong>Core principle:</strong> A successful electronic product must be safe, functional, reliable, properly tested, and appropriate for its intended application.</div>
+ <p class="small" style="margin-top:14px"><strong>Further reading:</strong> U.S. Department of Energy — Solar Photovoltaic Technology Basics and System Design Basics; Philippine Bureau of Philippine Standards (DTI-BPS) — applicable Philippine National Standards for PV systems. Always consult current manufacturer documentation and local electrical requirements.</p>
+</section>
+</main>
+<footer><strong>☀ Solar Panel Learning Hub</strong><br>Preparing Electronic Products • Interactive Classroom Resource<br><span class="small" style="color:#a9c4e8">Learn today. Power tomorrow. | Use all electrical equipment responsibly and safely.</span></footer>
+
+<div class="modal" id="componentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><button class="close" id="closeModal" aria-label="Close">×</button><h2 id="modalTitle"></h2><img id="modalImage" src="" alt=""><p id="modalDescription"></p><div class="callout" id="modalExtra"></div></div></div>
+
+<!-- Google Apps Script Setup Guide Modal -->
+<div class="modal" id="syncSetupModal" role="dialog" aria-modal="true" aria-labelledby="syncSetupTitle">
+ <div class="modal-box" style="max-width:800px">
+  <button class="close" id="closeSyncModal" aria-label="Close">×</button>
+  <h2 id="syncSetupTitle">📊 How to Synchronize Assessment & Live Stats to Google Sheets</h2>
+  <p>Follow these quick steps to link quiz submissions AND real-time views/likes to your Google Sheet using Google Apps Script:</p>
+  
+  <ol style="padding-left:20px;line-height:1.8">
+   <li>Open <a href="https://sheets.new" target="_blank" style="color:var(--blue);text-decoration:underline">Google Sheets</a> and create a new spreadsheet.</li>
+   <li>In the first tab, name it <strong>Quiz Submissions</strong> and add these exact headers in row 1:
+    <div class="code-block">Timestamp | Full Name | Grade Level | Section | Score | Total Questions | Percentage</div>
+   </li>
+   <li>Create a second tab by clicking the ➕ icon at the bottom and name it exactly: <strong>Stats</strong></li>
+   <li>In the <strong>Stats</strong> tab, set cell <strong>A1</strong> to <code>Views</code> and cell <strong>B1</strong> to <code>Likes</code>. Set <strong>A2</strong> to <code>0</code> and <strong>B2</strong> to <code>0</code>.</li>
+   <li>Click on <strong>Extensions</strong> → <strong>Apps Script</strong>.</li>
+   <li>Delete any existing code in the editor and paste the complete Google Apps Script code below:
+    <div class="code-block">function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var statsSheet = ss.getSheetByName("Stats");
+  
+  if (!statsSheet) {
+    statsSheet = ss.insertSheet("Stats");
+    statsSheet.getRange("A1").setValue("Views");
+    statsSheet.getRange("B1").setValue("Likes");
+    statsSheet.getRange("A2").setValue(0);
+    statsSheet.getRange("B2").setValue(0);
+  }
+  
+  var action = e && e.parameter ? e.parameter.action : "get";
+  var views = parseInt(statsSheet.getRange("A2").getValue()) || 0;
+  var likes = parseInt(statsSheet.getRange("B2").getValue()) || 0;
+  
+  if (action === "visit") {
+    views += 1;
+    statsSheet.getRange("A2").setValue(views);
+  } else if (action === "like") {
+    likes += 1;
+    statsSheet.getRange("B2").setValue(likes);
+  } else if (action === "unlike") {
+    likes = Math.max(0, likes - 1);
+    statsSheet.getRange("B2").setValue(likes);
+  }
+  
+  var output = JSON.stringify({ views: views, likes: likes });
+  return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName("Quiz Submissions") || ss.getSheets()[0];
+    var data = JSON.parse(e.postData.contents);
+    
+    sheet.appendRow([
+      data.timestamp || new Date(),
+      data.name,
+      data.grade,
+      data.section,
+      data.score,
+      data.total,
+      data.percentage + "%"
+    ]);
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({ "result": "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ "result": "error", "error": err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</div>
+   </li>
+   <li>Click <strong>Deploy</strong> → <strong>New deployment</strong>.</li>
+   <li>Click the gear icon ⚙️ next to "Select type" and select <strong>Web app</strong>.</li>
+   <li>Set the options:
+    <ul>
+     <li><strong>Execute as:</strong> Me (your account)</li>
+     <li><strong>Who has access:</strong> Anyone</li>
+    </ul>
+   </li>
+   <li>Click <strong>Deploy</strong>, authorize permissions, copy the <strong>Web App URL</strong>, and paste it into the teacher settings input on this page.</li>
+  </ol>
+ </div>
+</div>
+
+<script>
+// --- Embedded Google Apps Script Web App URL ---
+const EMBEDDED_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxGBDbrYFcYJPDuG8LPsyWGK-RXCFALHQ_CRoXgkqyd-0Ye6CmI8gO7DIsEzzgnMR_/exec";
+
+// --- Font Size Adjustment Feature ---
+let currentFontScale = 1.0;
+const minFontScale = 0.8;
+const maxFontScale = 1.4;
+
+function setFontScale(scale) {
+ currentFontScale = Math.min(Math.max(scale, minFontScale), maxFontScale);
+ document.documentElement.style.setProperty('--font-scale', currentFontScale);
+}
+
+document.getElementById('fontIncrease').addEventListener('click', () => setFontScale(currentFontScale + 0.1));
+document.getElementById('fontDecrease').addEventListener('click', () => setFontScale(currentFontScale - 0.1));
+document.getElementById('fontReset').addEventListener('click', () => setFontScale(1.0));
+
+// --- REAL-TIME VISITOR & LIKE COUNTER ENGINE ---
+let liveViews = 0;
+let liveLikes = 0;
+let hasLiked = localStorage.getItem('solar_hub_liked') === 'true';
+
+function updateUIStats(views, likes) {
+ const cleanViews = Math.max(0, parseInt(views, 10) || 0);
+ const cleanLikes = Math.max(0, parseInt(likes, 10) || 0);
+
+ liveViews = cleanViews;
+ liveLikes = cleanLikes;
+
+ document.getElementById('navViewsCount').textContent = cleanViews;
+ document.getElementById('navLikesCount').textContent = cleanLikes;
+ document.getElementById('heroLikesCount').textContent = cleanLikes;
+ document.getElementById('heroViewsStat').textContent = cleanViews;
+
+ const navBtn = document.getElementById('navLikeBtn');
+ const heroBtn = document.getElementById('heroLikeBtn');
+
+ if (hasLiked) {
+  navBtn.classList.add('liked');
+  navBtn.textContent = '❤️ Liked!';
+  heroBtn.classList.add('liked');
+  heroBtn.innerHTML = `❤️ Liked! (${cleanLikes})`;
+ } else {
+  navBtn.classList.remove('liked');
+  navBtn.textContent = '❤️ Like';
+  heroBtn.classList.remove('liked');
+  heroBtn.innerHTML = `❤️ Like Page (${cleanLikes})`;
+ }
+}
+
+async function fetchLiveStats(action = 'get') {
+ const scriptUrl = localStorage.getItem('appsScriptUrl') || EMBEDDED_APPS_SCRIPT_URL;
+ if (!scriptUrl) return;
+
+ try {
+  const targetUrl = scriptUrl + (scriptUrl.includes('?') ? '&' : '?') + 'action=' + action + '&t=' + Date.now();
+  const response = await fetch(targetUrl);
+  if (response.ok) {
+   const data = await response.json();
+   if (data && typeof data.views !== 'undefined') {
+    updateUIStats(data.views, data.likes);
+   }
+  }
+ } catch (e) {
+  console.warn('Real-time stats sync note:', e);
+ }
+}
+
+async function recordVisit() {
+ await fetchLiveStats('visit');
+}
+
+async function toggleLike() {
+ hasLiked = !hasLiked;
+ localStorage.setItem('solar_hub_liked', hasLiked ? 'true' : 'false');
+ const action = hasLiked ? 'like' : 'unlike';
+ updateUIStats(liveViews, hasLiked ? liveLikes + 1 : Math.max(0, liveLikes - 1));
+ await fetchLiveStats(action);
+}
+
+document.getElementById('navLikeBtn').addEventListener('click', toggleLike);
+document.getElementById('heroLikeBtn').addEventListener('click', toggleLike);
+
+// Initialize visits and periodic stats polling (every 10 seconds)
+recordVisit();
+setInterval(() => fetchLiveStats('get'), 10000);
+
+// --- SHA-256 Hash Helper Function ---
+async function sha256(message) {
+ const msgBuffer = new TextEncoder().encode(message);
+ const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+ const hashArray = Array.from(new Uint8Array(hashBuffer));
+ return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Pre-computed SHA-256 Hashes
+const STUDENT_HASH = "51d661e8997ed17128eb6531a0a4e24a54decbae441c4ec60c16b7a0306745bc";
+const TEACHER_HASH = "fd74bdd901857b89f5737e5352a2a8a2d1f000aa4bed4aee47c95afaa37d0f99";
+
+// --- Student Assessments Access Logic ---
+document.getElementById('unlockStudentBtn').addEventListener('click', async () => {
+ const inputVal = document.getElementById('studentCodeInput').value;
+ const inputHash = await sha256(inputVal);
+ if (inputHash === STUDENT_HASH) {
+  document.getElementById('assessmentsGate').style.display = 'none';
+  document.getElementById('assessmentsContent').style.display = 'block';
+  document.getElementById('studentAccessError').style.display = 'none';
+  document.getElementById('studentCodeInput').value = '';
+ } else {
+  document.getElementById('studentAccessError').style.display = 'block';
+ }
+});
+
+document.getElementById('studentCodeInput').addEventListener('keypress', (e) => {
+ if (e.key === 'Enter') document.getElementById('unlockStudentBtn').click();
+});
+
+document.getElementById('lockStudentBtn').addEventListener('click', () => {
+ document.getElementById('assessmentsContent').style.display = 'none';
+ document.getElementById('assessmentsGate').style.display = 'block';
+});
+
+// --- Teacher QuizBee / Activity Access Logic ---
+document.getElementById('unlockTeacherBtn').addEventListener('click', async () => {
+ const inputVal = document.getElementById('teacherCodeInput').value;
+ const inputHash = await sha256(inputVal);
+ if (inputHash === TEACHER_HASH) {
+  document.getElementById('quizBeeGate').style.display = 'none';
+  document.getElementById('quizBeeContent').style.display = 'block';
+  document.getElementById('teacherAccessError').style.display = 'none';
+  document.getElementById('teacherCodeInput').value = '';
+  const activeUrl = localStorage.getItem('appsScriptUrl') || EMBEDDED_APPS_SCRIPT_URL;
+  document.getElementById('scriptUrlInput').value = activeUrl;
+ } else {
+  document.getElementById('teacherAccessError').style.display = 'block';
+ }
+});
+
+document.getElementById('teacherCodeInput').addEventListener('keypress', (e) => {
+ if (e.key === 'Enter') document.getElementById('unlockTeacherBtn').click();
+});
+
+document.getElementById('lockTeacherBtn').addEventListener('click', () => {
+ document.getElementById('quizBeeContent').style.display = 'none';
+ document.getElementById('quizBeeGate').style.display = 'block';
+});
+
+// --- Save Apps Script Web App URL ---
+document.getElementById('saveScriptUrlBtn').addEventListener('click', () => {
+ const url = document.getElementById('scriptUrlInput').value.trim();
+ localStorage.setItem('appsScriptUrl', url);
+ const notice = document.getElementById('saveUrlNotice');
+ notice.textContent = '✓ Web App URL updated successfully!';
+ notice.style.display = 'inline-block';
+ setTimeout(() => notice.style.display = 'none', 3000);
+ fetchLiveStats('get');
+});
+
+// --- Sync Setup Guide Modal Handler ---
+const syncModal = document.getElementById('syncSetupModal');
+document.getElementById('openSyncSetupGuideBtn').addEventListener('click', () => syncModal.classList.add('open'));
+document.getElementById('closeSyncModal').addEventListener('click', () => syncModal.classList.remove('open'));
+syncModal.addEventListener('click', (e) => { if (e.target === syncModal) syncModal.classList.remove('open'); });
+
+const components={
+ cells:{title:"Solar Panel / Photovoltaic Cells",image:"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=85",desc:"The PV module is the energy-generating component. Semiconductor cells absorb photons and produce DC electricity through the photovoltaic effect.",extra:"Check: rated power (W), Vmp, Imp, Voc, Isc, temperature limits, visible damage, and shading."},
+ controller:{title:"Solar Charge Controller",image:"https://m.media-amazon.com/images/I/619bRLPN-lL.jpg",desc:"Regulates the energy delivered from the PV array to a battery and helps manage charging. PWM and MPPT are common controller types.",extra:"Check: battery chemistry and voltage, maximum PV input voltage, charging current, and manufacturer's connection sequence."},
+ battery:{title:"Battery",image:"https://img.vevorstatic.com/us/SXHDCLSTLLSTM2MD0001V9/goods_img-v1/deep-cycle-battery-m100-1.2.jpg?timestamp=1749116358000&format=webp",desc:"Stores electrical energy for use when sunlight is insufficient or unavailable. Battery chemistry affects charging, usable capacity, and maintenance.",extra:"Check: nominal voltage, Ah/Wh capacity, allowable depth of discharge, condition, and charging profile."},
+ inverter:{title:"Inverter",image:"https://images.unsplash.com/photo-1592833159157-66db0c7f6f2e?auto=format&fit=crop&w=1000&q=85",desc:"Converts DC power into AC power for compatible appliances. Some inverters also provide system monitoring or hybrid functions.",extra:"Check: output voltage/frequency, continuous and surge ratings, battery input range, ventilation, and protection."},
+ wires:{title:"Wires and Connectors",image:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1000&q=85",desc:"Carry current between PV modules, controllers, batteries, and loads. Solar cables and connectors must be compatible and rated for the environment.",extra:"Check: conductor size, insulation, voltage/current rating, connector compatibility, polarity, and secure termination."},
+ protection:{title:"Fuses, Breakers, and Disconnects",image:"https://fuspan.com/wp-content/uploads/2025/08/6solar-panel-protection-devices.jpg",desc:"Protect conductors and equipment against specified overcurrent or fault conditions and allow safe isolation when properly selected and installed.",extra:"Check: DC rating, interrupting capacity, placement, conductor protection, and system design. Never bypass protection."},
+ mount:{title:"Mounting Structure",image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RuBgfXfw4mH_t2HA0soNge5eAalcesJ3S3dgP887ew&s=10",desc:"Supports panels at an appropriate angle and position while resisting expected environmental loads.",extra:"Check: structural strength, corrosion resistance, secure attachment, roof condition, orientation, and safe access."},
+ meter:{title:"Digital Multimeter",image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy4jrt5Xqrqh5fpo86veIkHujnrUXouGE3kpKUl5c9Pw&s=10",desc:"A test instrument used to measure voltage, current, resistance, and continuity when configured correctly.",extra:"Check: meter category/rating, lead condition, correct function and range. Current measurements must be made using a safe, appropriate method."}
+};
+const modal=document.getElementById("componentModal");
+document.querySelectorAll(".component-card").forEach(card=>card.addEventListener("click",()=>{
+ const c=components[card.dataset.component];document.getElementById("modalTitle").textContent=c.title;
+ document.getElementById("modalImage").src=c.image;document.getElementById("modalImage").alt=c.title;
+ document.getElementById("modalDescription").textContent=c.desc;document.getElementById("modalExtra").textContent=c.extra;modal.classList.add("open");
+}));
+function closeModal(){modal.classList.remove("open")}
+document.getElementById("closeModal").addEventListener("click",closeModal);
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+document.getElementById("menuToggle").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("show"));
+document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>document.getElementById("navlinks").classList.remove("show")));
+document.getElementById("themeToggle").addEventListener("click",()=>{
+ document.body.classList.toggle("dark");document.getElementById("themeToggle").textContent=document.body.classList.contains("dark")?"☀️":"🌙";
+});
+
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+ document.querySelectorAll(".tabpanel").forEach(p=>p.classList.remove("active"));document.getElementById(btn.dataset.tab).classList.add("active");
+}));
+
+function calculate(){
+ const p=Number(document.getElementById("loadW").value),h=Number(document.getElementById("hours").value),sun=Number(document.getElementById("sunHours").value),eff=Number(document.getElementById("efficiency").value)/100,res=Number(document.getElementById("reserve").value)/100;
+ const out=document.getElementById("calcResult");
+ if([p,h,sun,eff,res].some(v=>!Number.isFinite(v))||p<0||h<0||h>24||sun<=0||eff<=0||eff>1||res<0){out.innerHTML="Please enter valid positive values (hours 0–24, efficiency 1–100%).";return}
+ const energy=p*h,panel=energy/(sun*eff),recommended=panel*(1+res);
+ out.innerHTML=`Daily energy: <strong>${energy.toFixed(2)} Wh/day</strong><br>Estimated panel size before allowance: ${panel.toFixed(2)} W<br>Suggested size with allowance: <strong>${recommended.toFixed(2)} W</strong>`;
+}
+document.getElementById("calculate").addEventListener("click",calculate);calculate();
+
+const quiz=[
+{q:"What is the primary function of a solar panel?",o:["Convert electricity into mechanical energy","Convert sunlight into electrical energy","Store electricity permanently","Convert AC into DC"],a:1,e:"PV cells convert light energy into electrical energy."},
+{q:"What is the photovoltaic effect?",o:["Light energy converted into electrical energy","Electricity converted into sound","Heat converted into mechanical energy","AC converted into DC"],a:0,e:"Photons transfer energy to charges in a semiconductor."},
+{q:"Which component regulates battery charging?",o:["Inverter","LED lamp","Charge controller","Fuse only"],a:2,e:"The charge controller manages charging according to battery/system settings."},
+{q:"Which device converts DC to AC?",o:["Battery","Inverter","Solar cell","Fuse"],a:1,e:"An inverter converts direct current to alternating current."},
+{q:"In a series connection of matched panels, what increases?",o:["Voltage","Current always doubles","Voltage becomes zero","Power disappears"],a:0,e:"Series voltages add; current is approximately the same."},
+{q:"In a parallel connection of matched panels, what increases?",o:["Voltage doubles","Current","Current becomes zero","Voltage becomes zero"],a:1,e:"Parallel currents add; voltage is approximately the same."},
+{q:"What is the formula for electrical power?",o:["P = V / I","P = I / V","P = V × I","P = V + I"],a:2,e:"Power in watts equals voltage in volts multiplied by current in amperes."},
+{q:"Which instrument measures DC voltage?",o:["Digital multimeter","Frequency generator","Logic analyzer only","Soldering iron"],a:0,e:"A DMM can measure DC voltage when set correctly and rated appropriately."},
+{q:"What is the battery's main role in an off-grid system?",o:["Convert AC to DC","Store electrical energy","Increase sunlight","Remove resistance"],a:1,e:"Batteries store energy for later use."},
+{q:"Which condition can reduce PV output?",o:["Proper exposure","Correct orientation","Partial shading","Good connections"],a:2,e:"Shading can reduce output, sometimes substantially."},
+{q:"Why verify polarity before connecting components?",o:["Increase panel size","Prevent incorrect connection and damage","Change sunlight","Remove controller"],a:1,e:"Correct polarity is important for safe operation and equipment protection."},
+{q:"What is a fuse designed to help provide?",o:["Energy storage","Sunlight generation","Overcurrent protection","More battery capacity"],a:2,e:"A correctly selected fuse protects a circuit against specified overcurrent."},
+{q:"Which is renewable?",o:["Coal","Diesel","Solar energy","Natural gas"],a:2,e:"Solar energy is naturally replenished."},
+{q:"Why test after assembly?",o:["Increase physical size","Verify function and find problems","Change semiconductor material","Avoid maintenance forever"],a:1,e:"Testing checks performance and helps identify faults."},
+{q:"Which practice shows responsible preparation?",o:["Ignore ratings","Bypass protection","Connect without inspection","Follow specifications and safety procedures"],a:3,e:"Safe, specification-based work is essential."}
+];
+const quizForm=document.getElementById("quizForm");
+quiz.forEach((item,i)=>{
+ const div=document.createElement("div");div.className="quiz-question";div.id="question"+i;
+ div.innerHTML=`<p>${i+1}. ${item.q}</p>`+item.o.map((op,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}">${String.fromCharCode(65+j)}. ${op}</label>`).join("")+`<div class="feedback" id="feedback${i}"></div>`;
+ quizForm.appendChild(div);
+ div.querySelectorAll("input").forEach(input=>input.addEventListener("change",updateProgress));
+});
+function updateProgress(){const answered=quiz.filter((_,i)=>document.querySelector(`input[name=q${i}]:checked`)).length;document.getElementById("quizProgress").style.width=(answered/quiz.length*100)+"%"}
+
+// --- Quiz Submission & Google Apps Script Sync ---
+document.getElementById("submitQuiz").addEventListener("click", async () => {
+ const name = document.getElementById("studentName").value.trim();
+ const grade = document.getElementById("studentGrade").value.trim();
+ const section = document.getElementById("studentSection").value.trim();
+
+ if (!name || !grade || !section) {
+  alert("Please complete your Full Name, Grade Level, and Section before submitting.");
+  document.getElementById("studentName").focus();
+  return;
+ }
+
+ let score = 0, answered = 0;
+ quiz.forEach((item, i) => {
+  const chosen = document.querySelector(`input[name=q${i}]:checked`), fb = document.getElementById("feedback" + i);
+  if (chosen) {
+   answered++;
+   if (Number(chosen.value) === item.a) {
+    score++;
+    fb.textContent = "✓ Correct! " + item.e;
+    fb.style.color = "var(--green)";
+   } else {
+    fb.textContent = "✗ Review: " + item.e;
+    fb.style.color = "#d97706";
+   }
+  } else {
+   fb.textContent = "Not answered. " + item.e;
+   fb.style.color = "var(--muted)";
+  }
+ });
+
+ const percentage = Math.round((score / quiz.length) * 100);
+ const result = document.getElementById("quizResult");
+ result.style.display = "block";
+ result.innerHTML = `<strong>Your score: ${score} / ${quiz.length} (${percentage}%)</strong><br>Student: ${name} | ${grade} - ${section}<br>Answered: ${answered}/${quiz.length}. Review the feedback under each question, then try again.`;
+ result.scrollIntoView({ behavior: "smooth", block: "center" });
+
+ const scriptUrl = localStorage.getItem("appsScriptUrl") || EMBEDDED_APPS_SCRIPT_URL;
+ const syncStatus = document.getElementById("syncStatus");
+ syncStatus.style.display = "block";
+
+ syncStatus.className = "sync-status pending";
+ syncStatus.innerHTML = "⏳ Synchronizing your score to Google Sheets...";
+
+ const payload = {
+  timestamp: new Date().toLocaleString(),
+  name: name,
+  grade: grade,
+  section: section,
+  score: score,
+  total: quiz.length,
+  percentage: percentage
+ };
+
+ try {
+  await fetch(scriptUrl, {
+   method: "POST",
+   mode: "no-cors",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify(payload)
+  });
+  syncStatus.className = "sync-status success";
+  syncStatus.innerHTML = "✅ Score successfully synchronized to Google Sheets!";
+ } catch (err) {
+  syncStatus.className = "sync-status error";
+  syncStatus.innerHTML = "⚠️ Failed to sync score. Please check your internet connection or Web App URL.";
+ }
+});
+
+document.getElementById("resetQuiz").addEventListener("click", () => {
+ quiz.forEach((_, i) => {
+  document.querySelectorAll(`input[name=q${i}]`).forEach(x => x.checked = false);
+  document.getElementById("feedback" + i).textContent = "";
+ });
+ document.getElementById("quizResult").style.display = "none";
+ document.getElementById("syncStatus").style.display = "none";
+ updateProgress();
+ document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+});
+
+const terms=[
+["AC (Alternating Current)","Electric current that periodically reverses direction."],
+["Ah (Ampere-hour)","A unit of battery charge capacity."],
+["Battery","A device that stores electrical energy chemically and supplies it when needed."],
+["Charge controller","Equipment that regulates PV charging of a battery."],
+["DC (Direct Current)","Electric current flowing in one direction."],
+["Efficiency","The ratio of useful output to input, often expressed as a percentage."],
+["Inverter","A device that converts DC electricity into AC electricity."],
+["Isc","Short-circuit current of a PV module under specified conditions."],
+["MPPT","Maximum Power Point Tracking; a control method that helps harvest available PV power."],
+["Peak sun hours","Equivalent hours at a reference solar irradiance used for energy estimates."],
+["Photovoltaic (PV)","Technology that converts light directly into electricity."],
+["PWM","Pulse Width Modulation; a common charge-controller regulation method."],
+["Solar cell","A semiconductor device that converts light into electrical energy."],
+["Voc","Open-circuit voltage of a PV module when no load is connected."],
+["Vmp / Imp","Voltage/current at a module's maximum power point."],
+["Watt (W)","A unit of power; one joule of energy per second."],
+["Watt-hour (Wh)","A unit of energy equal to one watt used for one hour."]
+];
+const glossaryList=document.getElementById("glossaryList");
+function renderGlossary(filter=""){glossaryList.innerHTML="";terms.filter(t=>(t[0]+" "+t[1]).toLowerCase().includes(filter.toLowerCase())).forEach(t=>{const d=document.createElement("details");d.innerHTML=`<summary>${t[0]}</summary><p>${t[1]}</p>`;glossaryList.appendChild(d)})}
+renderGlossary();document.getElementById("glossarySearch").addEventListener("input",e=>renderGlossary(e.target.value));
+</script>
+</body>
+</html>
